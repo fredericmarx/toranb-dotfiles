@@ -10,5 +10,9 @@
     deleted = red
     untracked = yellow
 [user]
-	name = toran billups
-	email = toranb@gmail.com
+	name = fredericmarx
+	email = marx.frederic@gmail.com
+[filter "lfs"]
+	smudge = git-lfs smudge %f
+	required = true
+	clean = git-lfs clean %f
