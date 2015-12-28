@@ -1,4 +1,3 @@
-set nocompatible
 let iCanHazNeoBundle=1
 let neobundle_readme=expand($HOME.'/.vim/bundle/neobundle.vim/README.md')
 if !filereadable(neobundle_readme)
@@ -12,13 +11,11 @@ if has('vim_starting')
     set rtp+=$HOME/.vim/bundle/neobundle.vim/
 endif
 call neobundle#begin(expand($HOME.'/.vim/bundle/'))
-NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neobundle.vim' " Next generation Vim package manager
 NeoBundle 'bkad/CamelCaseMotion'
 NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'JarrodCTaylor/vim-256-color-schemes'
-NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive' " fugitive.vim: a Git wrapper so awesome, it should be illegal
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'ervandew/supertab'
 NeoBundle 'pangloss/vim-javascript'
@@ -28,7 +25,6 @@ NeoBundle 'tpope/vim-commentary'
 NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'mhinz/vim-startify'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'JarrodCTaylor/vim-python-test-runner'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'JarrodCTaylor/vim-shell-executor'
@@ -49,12 +45,25 @@ NeoBundle '~/dotfiles/vim/my-plugins/tmux-navigator', {'type': 'nosync'}
 NeoBundle '~/dotfiles/vim/my-plugins/vim-ack', {'type': 'nosync'}
 NeoBundle '~/dotfiles/vim/my-plugins/vim-grep-quickfix', {'type': 'nosync'}
 NeoBundle '~/dotfiles/vim/my-plugins/vim-wiki-links', {'type': 'nosync'}
-NeoBundle 'hhff/SpacegrayEighties.vim'
+NeoBundle 'tpope/vim-dispatch' " Run shell commands async in split view
+NeoBundle 'editorconfig/editorconfig-vim' " Use .editorconfig files
+NeoBundle 'airblade/vim-gitgutter' " A Vim plugin which shows a git diff in the gutter (sign column) and stages/reverts hunks.
 call neobundle#end()
 filetype  plugin on
 filetype  indent on
 set t_Co=256
 syntax on
+
+hi clear CursorLine                       " Remove CursorLine styles to get rid of underline
+set cursorline                         " Highlight current line
+hi CursorLine  ctermbg=24
+hi Visual term=reverse cterm=reverse guibg=24
+
+set nocompatible
+set fileencoding=utf8 								 " Set file encoding to UTF8
+set encoding=utf8 									   " Fix encoding for special chars in interface
+set showmode                           " Show the current mode
+set relativenumber                     " Enable relative line numbers for super fast movement
 set autoindent                         " Copy indent from current line
 set autoread                           " Read open files again when changed outside Vim
 set autowrite                          " Write a modified buffer on each :next , ...
@@ -70,11 +79,11 @@ set noswapfile                         " Ain't nobody got time for swap files
 set noerrorbells                       " Don't beep
 set nowrap                             " Do not wrap lines
 set popt=left:8pc,right:3pc            " Print options
-set shiftwidth=4                       " Number of spaces to use for each step of indent
+set shiftwidth=2                       " Number of spaces to use for each step of indent
 set showcmd                            " Display incomplete commands in the bottom line of the screen
 set ignorecase                         " Ignore case when searching....
 set smartcase                          " ...unless uppercase letter are used
-set tabstop=4                          " Number of spaces that a <Tab> counts for
+set tabstop=2                          " Number of spaces that a <Tab> counts for
 set expandtab                          " Make vim use spaces and not tabs
 set undolevels=1000                    " Never can be too careful when it comes to undoing
 set hidden                             " Don't unload the buffer when we switch between them. Saves undo history
@@ -83,7 +92,6 @@ set wildignore=*.swp,*.bak,*.pyc,*.class,tmp/**,dist/**,node_modules/**  " wildm
 set wildmenu                           " Command-line completion in an enhanced mode
 set shell=bash                         " Required to let zsh know how to run things on command line
 set ttimeoutlen=50                     " Fix delay when escaping from insert with Esc
-set noshowmode                         " Hide the default mode text (e.g. -- INSERT -- below the statusline)
 set showbreak=↪\
 set synmaxcol=256
 set scrolloff=3
@@ -99,12 +107,6 @@ if has("autocmd")
 endif
 
 syntax enable
-colorscheme anderson
-let g:solarized_termcolors = &t_Co
-let g:solarized_termtrans = 1
-let g:solarized_termcolors=256
-let g:solarized_visibility = "high"
-let g:solarized_contrast = "high"
 set background=dark
 
 let g:mustache_abbreviations = 1
@@ -120,12 +122,9 @@ nnoremap <Right> :vertical resize -1<CR>
 nnoremap <Up> :resize +1<CR>
 nnoremap <Down> :resize -1<CR>
 set laststatus=2                                    " Make the second to last line of vim our status line
-let g:airline_theme='understated'                   " Use the custom theme I wrote
-let g:airline_left_sep=''                           " No separator as they seem to look funky
-let g:airline_right_sep=''                          " No separator as they seem to look funky
-let g:airline#extensions#branch#enabled = 0         " Do not show the git branch in the status line
+let g:airline_theme='tomorrow'                      " Use tomorrow theme
+let g:airline_powerline_fonts = 1                   " Use powerline symbol fonts
 let g:airline#extensions#syntastic#enabled = 1      " Do show syntastic warnings in the status line
-let g:airline#extensions#tabline#show_buffers = 0   " Do not list buffers in the status line
 let g:airline_section_x = ''                        " Do not list the filetype or virtualenv in the status line
 let g:airline_section_y = '[R%04l,C%04v] [LEN=%L]'  " Replace file encoding and file format info with file position
 let g:airline_section_z = ''                        " Do not show the default file position info
@@ -137,6 +136,7 @@ autocmd BufReadPost quickfix nnoremap <buffer> <CR> :.cc<CR>
 autocmd BufReadPost quickfix nnoremap <buffer> o :.cc<CR>
 nnoremap <Leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 cmap w!! w !sudo tee %
+let g:gitgutter_realtime = 1											" Update gitgutter in realtime
 let g:syntastic_check_on_open=1                   " check for errors when file is loaded
 let g:syntastic_loc_list_height=5                 " the height of the error list defaults to 10
 let g:syntastic_python_checkers = ['flake8']      " sets flake8 as the default for checking python files
