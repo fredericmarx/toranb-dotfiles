@@ -12,6 +12,7 @@ vim/bundle/vim-fugitive/*
 vim/bundle/vim-javascript/*
 vim/bundle/vundle/*
 
+.netrwhist
 .DS_Store
 Mac/.DS_Store
 Linux/.DS_Store
